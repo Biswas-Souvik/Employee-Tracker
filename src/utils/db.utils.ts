@@ -3,7 +3,7 @@ import { employees } from '../schema/employees';
 import { projects } from '../schema/projects';
 import { employeeProjects } from '../schema/employee_projects';
 
-import { eq, and, or, isNull } from 'drizzle-orm';
+import { eq, or, isNull } from 'drizzle-orm';
 import { alias } from 'drizzle-orm/pg-core';
 
 const e = alias(employees, 'e');
@@ -11,56 +11,79 @@ const ep = alias(employeeProjects, 'ep');
 const p = alias(projects, 'p');
 
 export async function listEmployees() {
-  const allEmployees = await db.select().from(e);
-
-  return allEmployees;
+  return await db
+    .select({
+      employeeId: e.employeeId,
+      employeeName: e.employeeName,
+      employeeEmail: e.email,
+    })
+    .from(e);
 }
 
 export async function employeeWithProject() {
-  const employeesInProject = await db
-    .select()
+  return await db
+    .select({
+      employeeId: e.employeeId,
+      employeeName: e.employeeName,
+      employeeEmail: e.email,
+
+      projectId: p.projectId,
+      projectName: p.projectName,
+      projectStatus: p.status,
+    })
     .from(e)
     .leftJoin(ep, eq(ep.employeeId, e.employeeId))
     .leftJoin(p, eq(ep.projectId, p.projectId))
     .orderBy(e.employeeId);
-  return employeesInProject;
 }
 
 export async function listProjects() {
-  const activeProjects = await db
-    .select()
+  return await db
+    .select({
+      projectId: p.projectId,
+      projectName: p.projectName,
+      status: p.status,
+    })
     .from(p)
     .where(eq(p.status, 'ACTIVE'));
-
-  return activeProjects;
 }
 
 export async function employeePartofProject() {
-  const employeesInProject = await db
-    .select()
+  return await db
+    .select({
+      employeeId: e.employeeId,
+      employeeName: e.employeeName,
+      projectId: ep.projectId,
+      assignedAt: ep.assignedAt,
+    })
     .from(e)
     .innerJoin(ep, eq(ep.employeeId, e.employeeId))
     .where(isNull(ep.releasedAt));
-
-  return employeesInProject;
 }
 
 export async function projectWithEmployee() {
-  const projectsForEmployee = await db
-    .select()
+  return await db
+    .select({
+      projectId: p.projectId,
+      projectName: p.projectName,
+      employeeId: ep.employeeId,
+      assignedAt: ep.assignedAt,
+    })
     .from(p)
     .innerJoin(ep, eq(ep.projectId, p.projectId))
     .where(isNull(ep.releasedAt));
-  return projectsForEmployee;
 }
 
 export async function employeeInBench() {
-  const benchEmployees = await db
-    .select()
+  return await db
+    .select({
+      employeeId: e.employeeId,
+      employeeName: e.employeeName,
+      employeeEmail: e.email,
+    })
     .from(e)
     .leftJoin(ep, eq(e.employeeId, ep.employeeId))
     .leftJoin(p, eq(ep.projectId, p.projectId))
     .where(or(isNull(p.projectId), eq(p.status, 'INACTIVE')))
     .orderBy(e.employeeId);
-  return benchEmployees;
 }
