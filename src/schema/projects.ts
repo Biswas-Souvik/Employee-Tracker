@@ -23,7 +23,5 @@ export const projects = pgTable(
     endDate: date('end_date'),
     createdAt: timestamp('created_at').defaultNow(),
   },
-  (table) => ({
-    statusIdx: index('idx_projects_status').on(table.status),
-  })
+  (table) => [index('idx_projects_status').on(table.status)]
 );

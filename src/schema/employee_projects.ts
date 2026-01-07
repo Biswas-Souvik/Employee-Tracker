@@ -14,7 +14,5 @@ export const employeeProjects = pgTable(
     assignedAt: timestamp('assigned_at').defaultNow(),
     releasedAt: timestamp('released_at'),
   },
-  (table) => ({
-    pk: primaryKey(table.employeeId, table.projectId),
-  })
+  (table) => [primaryKey({ columns: [table.employeeId, table.projectId] })]
 );
