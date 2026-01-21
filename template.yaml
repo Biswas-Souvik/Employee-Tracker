@@ -1,0 +1,43 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: URL Shortener API using AWS SAM
+
+Globals:
+  Function:
+    Runtime: nodejs24.x
+    Timeout: 5
+    MemorySize: 128
+
+Resources:
+  QueryApiSouvik:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: QueryApiSouvik-souvik
+      StageName: test
+      EndpointConfiguration:
+        Type: REGIONAL
+
+  QueryFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      CodeUri: ./
+      FunctionName: QueryFunction-souvik
+      Environment:
+        Variables:
+          DATABASE_URL: ''
+      Events:
+        CreateEndpoint:
+          Type: Api
+          Properties:
+            RestApiId: !Ref QueryApiSouvik
+            Path: /data
+            Method: get
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: 'es2020'
+        Sourcemap: true
+        EntryPoints:
+          - src/index.ts
