@@ -62,4 +62,10 @@ async function insertSampleData() {
   ]);
 }
 
-insertSampleData();
+insertSampleData()
+  .then(() => {
+    console.log('Do nothing');
+  })
+  .catch(() => {
+    console.log('Do nothing');
+  });
