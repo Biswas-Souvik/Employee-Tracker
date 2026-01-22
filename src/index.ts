@@ -11,38 +11,32 @@ import {
 
 export const handler = async (event: any) => {
   try {
-    const employees = await listEmployees();
-    // console.log('All Employees: ');
-    // console.table(employees);
+    const { q } = event?.queryStringParameters ?? {};
+    console.log(q);
 
-    const employeesWithProjects = await employeeWithProject();
-    // console.log('\nEmployees with Projects: ');
-    // console.table(employeesWithProjects);
-
-    const projects = await listProjects();
-    // console.log('\nAll Active Projects: ');
-    // console.table(projects);
-
-    const employeesPerProject = await employeePartofProject();
-    // console.log('\nEmployees with Project: ');
-    // console.table(employeesPerProject);
-
-    const projectsWithEmployee = await projectWithEmployee();
-    // console.log('\nProjects with Assigned Employees: ');
-    // console.table(projectsWithEmployee);
-
-    const benchEmployees = await employeeInBench();
-    // console.log('\nEmployees on Bench (No Active Project): ');
-    // console.table(benchEmployees);
-
-    const output = {
-      employees,
-      employeesWithProjects,
-      projects,
-      employeesPerProject,
-      projectsWithEmployee,
-      benchEmployees,
-    };
+    let output = {};
+    switch (q) {
+      case 'employees':
+        output = await listEmployees();
+        break;
+      case 'employeesProjects':
+        output = await employeeWithProject();
+        break;
+      case 'projects':
+        output = await listProjects();
+        break;
+      case 'employeesActive':
+        output = await employeePartofProject();
+        break;
+      case 'projectsActive':
+        output = await projectWithEmployee();
+        break;
+      case 'employeesBench':
+        output = await employeeInBench();
+        break;
+      default:
+        console.error('Invalid Query String: ' + query);
+    }
 
     return { statusCode: 200, body: JSON.stringify(output) };
   } catch (err) {

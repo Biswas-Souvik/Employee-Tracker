@@ -1,8 +1,8 @@
 WITH inserted_employees AS (
 INSERT INTO employees (employee_name, email, role, department)
 VALUES
-('Souvik Biswas', 'souvik@example.com', 'Backend Engineer', 'Engineering'),
-('Naveen PL', 'np@example.com', 'Frontend Engineer', 'Engineering'),
+('Souvik', 'souvik@example.com', 'Backend Engineer', 'Engineering'),
+('Manikanta', 'manikanta@example.com', 'Frontend Engineer', 'Engineering'),
 ('Dheeraj', 'dgb@example.com', 'Senion Full-Stack Engineer', 'Quality')
 RETURNING employee_id, employee_name
 ),
@@ -19,7 +19,7 @@ SELECT e.employee_id, p.project_id
 FROM inserted_employees e
 JOIN inserted_projects p
 ON (
-(e.employee_name = 'Souvik Biswas' AND p.project_name IN ('Employee Tracker', 'URL Shortener'))
+(e.employee_name = 'Souvik' AND p.project_name IN ('Employee Tracker', 'URL Shortener'))
 OR
-(e.employee_name = 'Naveen PL' AND p.project_name = 'Employee Tracker')
+(e.employee_name = 'Manikanta' AND p.project_name = 'Employee Tracker')
 );
