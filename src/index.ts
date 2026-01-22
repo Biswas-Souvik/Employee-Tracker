@@ -35,7 +35,7 @@ export const handler = async (event: any) => {
         output = await employeeInBench();
         break;
       default:
-        console.error('Invalid Query String: ' + query);
+        console.error('Invalid Query String: ' + q);
     }
 
     return { statusCode: 200, body: JSON.stringify(output) };
