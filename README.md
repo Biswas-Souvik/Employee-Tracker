@@ -16,7 +16,7 @@ The API queries the database based on **query parameters**.
 - [Project Structure](#project-structure)
 - [PostgreSQL Setup (Docker)](#postgresql-setup-docker)
 - [Environment Variables](#environment-variables)
-- [SAM Template Explanation](#sam-template-explanation)
+- [ Verify SAM Template](#verify-sam-template)
 - [Lambda Handler Logic](#lambda-handler-logic)
 - [Database Connection](#database-connection)
 - [Local Setup – Step by Step](#local-setup--step-by-step)
@@ -193,7 +193,7 @@ Create a file called **env.json** in the root of the project:
 
 ---
 
-## Make sure SAM Template Lambda has the Env variable declared
+## Verify SAM Template
 
     Environment:
         Variables:
